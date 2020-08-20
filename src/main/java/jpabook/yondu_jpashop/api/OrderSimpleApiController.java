@@ -5,6 +5,8 @@ import jpabook.yondu_jpashop.domain.Order;
 import jpabook.yondu_jpashop.domain.OrderStatus;
 import jpabook.yondu_jpashop.repository.OrderRepository;
 import jpabook.yondu_jpashop.repository.OrderSearch;
+import jpabook.yondu_jpashop.repository.order.simplequery.OrderSimpleQueryDto;
+import jpabook.yondu_jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() {
@@ -52,6 +55,7 @@ public class OrderSimpleApiController {
 
     /**
      * Fetch Join 사용
+     * 범용성이 좋음
      */
     @GetMapping("/api/v3/simple-orders")
     public List<SimpleOrderDto> ordersV3() {
@@ -61,6 +65,15 @@ public class OrderSimpleApiController {
                 .collect(Collectors.toList());
 
         return result;
+    }
+
+    /**
+     * SELECT 절에서 원하는 데이터를 직접 선택하므로 네트워크 용량 최적화(생각보다 미비하다)
+     * 레파지토리 재사용성이 떨어짐
+     */
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> ordersV4() {
+        return orderSimpleQueryRepository.findOrderDtos();
     }
 
     @Data
