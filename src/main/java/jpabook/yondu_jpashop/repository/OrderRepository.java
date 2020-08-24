@@ -123,6 +123,19 @@ public class OrderRepository {
     }
 
     /**
+     * JPA의 distinct는 SQL에 distinct를 추가하고,
+     * 더해서 같은 엔티티가 조회되면, 애플리케이션에서 중복을 걸러줌
+     * 단점은 페이징이 불가함 -> 메모리에서 페이징 해버리기 때문
+     */
+    public List<Order> findAllWithItem() {
+        return em.createQuery("select distinct o from Order o " +
+                "join fetch o.member m " +
+                "join fetch o.delivery d " +
+                "join fetch o.orderItems oi " +
+                "join fetch oi.item i", Order.class).getResultList();
+    }
+
+    /**
      * Case 3 : Querydsl로 처리
      */
 //    public List<Order> findAll(OrderSearch orderSearch) {
