@@ -122,6 +122,16 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
     /**
      * JPA의 distinct는 SQL에 distinct를 추가하고,
      * 더해서 같은 엔티티가 조회되면, 애플리케이션에서 중복을 걸러줌
