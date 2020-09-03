@@ -13,6 +13,10 @@ spring:
         #show_sql: true
         format_sql: true
         default_batch_fetch_size : 100
+    open-in-view: false
+    # OSIV를 끄면 트랜잭션을 종료할 때 영속성 컨텍스트를 닫고, 데이터베이스 커넥션도 반환한다.
+    # OSIV = false 시 모든 지연로딩을 트랜잭션 안에서 처리해야 한다.
+    # 고객 서비스의 실시간 API는 OSIV를 끄고, Admin처럼 커넥션을 많이 사용하지 않는 곳에서는 OSIV를 켠다.
 
 logging.level:
   org.hibernate.SQL: debug
